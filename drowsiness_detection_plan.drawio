@@ -1,0 +1,100 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="plan" name="Project Plan">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="&lt;b&gt;&lt;font style=&quot;font-size:22px&quot;&gt;Real-Time Driver Drowsiness Detection – Project Plan&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Facial landmarks / Face Mesh → EAR, MAR, Head Pose → RF, SVM, Sequential NN, CNN → Alarm" style="text;html=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1420" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Row 1 -->
+        <mxCell id="h1" value="&lt;b&gt;Phase 1: Scoping &amp;amp; Literature Review&lt;/b&gt;&lt;br&gt;Week 1–2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1" value="• Define goals, scope and success metrics (target accuracy, recall on drowsy class, FPS)&lt;br&gt;• Review papers: EAR/PERCLOS, MAR yawning, head-pose nodding, CNN approaches&lt;br&gt;• Compare landmark tools: dlib 68-pt vs MediaPipe Face Mesh (468 pts)&lt;br&gt;• Select tech stack: Python, OpenCV, MediaPipe/dlib, scikit-learn, TensorFlow/Keras&lt;br&gt;• Set up repo, environment, experiment tracking&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; scope doc + literature summary" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#f5f9ff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="h2" value="&lt;b&gt;Phase 2: Dataset Acquisition &amp;amp; Preparation&lt;/b&gt;&lt;br&gt;Week 2–3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="420" y="110" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b2" value="• Choose dataset(s): NTHU-DDD, UTA-RLDD, YawDD, DROZY (or custom recordings)&lt;br&gt;• Check licenses / request access&lt;br&gt;• Extract frames, standardise resolution and frame rate&lt;br&gt;• Label frames/clips: alert vs drowsy&lt;br&gt;• Split by SUBJECT (train/val/test) to avoid identity leakage&lt;br&gt;• Check class balance; plan augmentation (lighting, glasses, occlusion)&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; clean, labelled, split dataset" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#f4fbf3;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="420" y="160" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="h3" value="&lt;b&gt;Phase 3: Face Detection &amp;amp; Landmark Extraction&lt;/b&gt;&lt;br&gt;Week 3–4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="800" y="110" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b3" value="• Face detector + facial landmarks (dlib / MediaPipe Face Mesh)&lt;br&gt;• Locate ROIs: left eye, right eye, mouth, head&lt;br&gt;• &lt;b&gt;EAR&lt;/b&gt; = (|p2–p6| + |p3–p5|) / (2|p1–p4|)&lt;br&gt;• &lt;b&gt;MAR&lt;/b&gt; = mouth opening / mouth width&lt;br&gt;• &lt;b&gt;Head pose&lt;/b&gt;: solvePnP → pitch, yaw, roll&lt;br&gt;• Handle missing faces, smoothing, per-driver calibration&lt;br&gt;• Crop eye/mouth patches for the CNN&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; feature extraction module" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#fffbed;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="800" y="160" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="h4" value="&lt;b&gt;Phase 4: Feature Engineering&lt;/b&gt;&lt;br&gt;Week 4–5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="110" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b4" value="• Sliding time windows (e.g. 3–5 s, 50% overlap)&lt;br&gt;• Temporal features: PERCLOS, blink rate &amp;amp; duration, yawn count, nod frequency, mean/std of EAR, MAR, pose angles&lt;br&gt;• Normalise / standardise per driver&lt;br&gt;• Feature selection &amp;amp; correlation analysis&lt;br&gt;• Build feature table (for RF, SVM, NN) and image/sequence tensors (for CNN)&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; training-ready feature sets" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#fff8ef;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="160" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <!-- Row 2 -->
+        <mxCell id="h5" value="&lt;b&gt;Phase 5: Model Development&lt;/b&gt;&lt;br&gt;Week 5–8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="520" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b5" value="Train four classifiers on the same splits:&lt;br&gt;• &lt;b&gt;Random Forest&lt;/b&gt; – tune trees, depth&lt;br&gt;• &lt;b&gt;SVM&lt;/b&gt; – RBF kernel, tune C / gamma&lt;br&gt;• &lt;b&gt;Sequential NN&lt;/b&gt; – dense layers, dropout, early stopping&lt;br&gt;• &lt;b&gt;CNN&lt;/b&gt; – eye/mouth crops (optionally CNN+LSTM)&lt;br&gt;• Hyperparameter search with cross-validation&lt;br&gt;• Handle imbalance (class weights / SMOTE)&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; trained, saved models" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#f8f3fa;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="570" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="h6" value="&lt;b&gt;Phase 6: Evaluation &amp;amp; Comparison&lt;/b&gt;&lt;br&gt;Week 8–9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="420" y="520" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b6" value="• Metrics: accuracy, precision, recall, F1, ROC-AUC, confusion matrix&lt;br&gt;• Prioritise recall of the drowsy class (missed alerts are costly)&lt;br&gt;• Subject-independent test + k-fold cross-validation&lt;br&gt;• Ablation: EAR only vs +MAR vs +head pose&lt;br&gt;• Compare inference time and model size&lt;br&gt;• Error analysis: glasses, night, occlusion, head turns&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; results tables, plots, best model" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#fdf1f0;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="420" y="570" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="h7" value="&lt;b&gt;Phase 7: Real-Time System Integration&lt;/b&gt;&lt;br&gt;Week 9–11" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;" vertex="1" parent="1">
+          <mxGeometry x="800" y="520" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b7" value="• Pipeline: camera → face mesh → features → classifier → decision&lt;br&gt;• Temporal smoothing / thresholds to cut false alarms&lt;br&gt;• Alarm: audio beep + visual warning, escalation levels&lt;br&gt;• Optimise for ≥ 15–30 FPS (resize, threading, lightweight model)&lt;br&gt;• Optional: deploy to Raspberry Pi / Jetson / mobile&lt;br&gt;• Logging of events for later review&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; working real-time demo" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#eef8fc;strokeColor=#10739e;" vertex="1" parent="1">
+          <mxGeometry x="800" y="570" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="h8" value="&lt;b&gt;Phase 8: Testing, Documentation &amp;amp; Delivery&lt;/b&gt;&lt;br&gt;Week 11–12" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d0cee2;strokeColor=#56517e;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="520" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="b8" value="• Live tests: different drivers, lighting, camera angles, with/without glasses&lt;br&gt;• Simulated drowsiness safely (never test while driving)&lt;br&gt;• Fix bugs, final threshold tuning&lt;br&gt;• Write report: method, results, limitations, ethics/privacy&lt;br&gt;• Prepare slides, demo video, README&lt;br&gt;&lt;b&gt;Deliverable:&lt;/b&gt; final report, code, presentation" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#f4f3f9;strokeColor=#56517e;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="570" width="320" height="270" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="h1" target="h2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="h2" target="h3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e34" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="h3" target="h4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e45" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="b4" target="h5"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1340" y="470"/><mxPoint x="200" y="470"/></Array></mxGeometry></mxCell>
+        <mxCell id="e56" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="h5" target="h6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e67" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="h6" target="h7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e78" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="h7" target="h8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e65" value="iterate: tune / add features" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;endArrow=block;strokeColor=#b85450;exitX=0.5;exitY=1;entryX=0.5;entryY=1;" edge="1" parent="1" source="b6" target="b5"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="580" y="870"/><mxPoint x="200" y="870"/></Array></mxGeometry></mxCell>
+
+        <!-- Timeline -->
+        <mxCell id="tl_t" value="&lt;b&gt;Timeline (12 weeks)&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="900" width="300" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="t1" value="P1&lt;br&gt;W1–2" style="rounded=1;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="940" width="230" height="50" as="geometry"/></mxCell>
+        <mxCell id="t2" value="P2&lt;br&gt;W2–3" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="150" y="1000" width="230" height="50" as="geometry"/></mxCell>
+        <mxCell id="t3" value="P3&lt;br&gt;W3–4" style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="270" y="1060" width="230" height="50" as="geometry"/></mxCell>
+        <mxCell id="t4" value="P4&lt;br&gt;W4–5" style="rounded=1;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="390" y="1120" width="230" height="50" as="geometry"/></mxCell>
+        <mxCell id="t5" value="P5&lt;br&gt;W5–8" style="rounded=1;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="510" y="940" width="400" height="50" as="geometry"/></mxCell>
+        <mxCell id="t6" value="P6&lt;br&gt;W8–9" style="rounded=1;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="870" y="1000" width="240" height="50" as="geometry"/></mxCell>
+        <mxCell id="t7" value="P7&lt;br&gt;W9–11" style="rounded=1;html=1;fillColor=#b1ddf0;strokeColor=#10739e;" vertex="1" parent="1"><mxGeometry x="990" y="1060" width="320" height="50" as="geometry"/></mxCell>
+        <mxCell id="t8" value="P8&lt;br&gt;W11–12" style="rounded=1;html=1;fillColor=#d0cee2;strokeColor=#56517e;" vertex="1" parent="1"><mxGeometry x="1230" y="1120" width="270" height="50" as="geometry"/></mxCell>
+
+        <!-- Risks -->
+        <mxCell id="risk" value="&lt;b&gt;Key risks &amp;amp; mitigations&lt;/b&gt;&lt;br&gt;• Low light / glasses → augmentation, IR camera option&lt;br&gt;• Inter-driver variability → per-driver calibration, subject-wise splits&lt;br&gt;• False alarms → temporal smoothing, tuned thresholds&lt;br&gt;• Real-time lag → lightweight models, frame skipping&lt;br&gt;• Privacy → process on-device, no video storage" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="900" width="320" height="110" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
